@@ -1,0 +1,120 @@
+﻿@model PaginatedList<HeroModel>
+
+@{
+    ViewData["Title"] = "List of Heroes";
+}
+
+<h1>List of Heroes</h1>
+
+<script type="text/javascript">
+
+    window.addEventListener('load', function () {
+        searchButtonStatus(document.getElementById('txtSearchValue').value);
+    });
+
+    function searchButtonStatus(val) {
+
+        if (val.length >= 3) 
+        { 
+            document.getElementById('btnSearch').disabled = false;
+        } 
+        else 
+        { 
+            document.getElementById('btnSearch').disabled = true;
+        }
+    }
+
+</script>
+
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <label>Search name: <input type="text" id="txtSearchValue" name="searchValue" value="@ViewData["CurrentFilter"]" onkeyup="searchButtonStatus(this.value)" /></label>
+            <input type="submit" id="btnSearch" value="Search" disabled class="btn-default" /> |
+            <a asp-action="Index">Reset List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["NameSortParm"]">Name</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["GenderSortParm"]">Gender</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["EyeColorSortParm"]">EyeColor</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["HairColorSortParm"]">HairColor</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["HeightSortParm"]">Height</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["PublisherSortParm"]">Publisher</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["AlignmentSortParm"]">Alignment</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-sortOrder="@ViewData["WeightSortParm"]">Weight</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EyeColor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HairColor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Height)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Alignment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
